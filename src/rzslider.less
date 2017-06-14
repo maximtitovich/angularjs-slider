@@ -160,6 +160,16 @@
     &.rz-selected {
       background: @selectedTicksColor;
     }
+	&[disabled] {
+		cursor: not-allowed;
+		opacity: 0.6;
+		.rz-tick-value,
+		.rz-tick-legend,
+		* {
+			cursor: not-allowed;
+			opacity: 0.6;
+		}
+	}
   }
 
   .rz-tick-value {

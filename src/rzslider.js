@@ -47,6 +47,7 @@
       id: null,
       translate: null,
       getLegend: null,
+      getDisabled: null,
       stepsArray: null,
       bindIndexForStepsArray: false,
       draggableRange: false,
@@ -588,6 +589,7 @@
             };
 
           this.getLegend = this.options.getLegend;
+          this.getDisabled = this.options.getDisabled;
         }
 
         if (this.options.vertical) {
@@ -621,6 +623,13 @@
             return step.legend;
           return null;
         };
+		
+		this.getDisabled = function(index) {
+			var step = this.options.stepsArray[index];
+			if (angular.isObject(step))
+				return step.disabled;
+			return null;
+          };
       },
 
       /**
@@ -1024,6 +1033,8 @@
             if (legend)
               tick.legend = legend;
           }
+		  if (self.getDisabled)
+			tick.disabled = self.getDisabled(value, self.options.id);
           return tick;
         });
       },
@@ -2141,6 +2152,8 @@
        * @param {number} newValue new model value
        */
       positionTrackingHandle: function(newValue) {
+		if(this.scope.ticks[newValue].disabled)
+			return false;
         var valueChanged = false;
         newValue = this.applyMinMaxLimit(newValue);
         if (this.range) {
